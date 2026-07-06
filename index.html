@@ -115,11 +115,11 @@ tbody tr:hover{background:#fafcff}
 </div>
 
 <div class="tabs">
-  <button class="tab active" onclick="switchTab('ranking')">🏆 综合排名<span class="badge">TOP20</span></button>
-  <button class="tab" onclick="switchTab('eliminated')">❌ 淘汰名单<span class="badge" id="badge-elim">0</span></button>
-  <button class="tab" onclick="switchTab('flagged')">⚠️ 存疑区<span class="badge" id="badge-flag">0</span></button>
-  <button class="tab" onclick="switchTab('cards')">🃏 评估卡</button>
-  <button class="tab" onclick="switchTab('funnel')">📊 复盘 & V2</button>
+  <button class="tab active" data-tab="ranking" onclick="switchTab('ranking')">🏆 综合排名<span class="badge">TOP20</span></button>
+  <button class="tab" data-tab="eliminated" onclick="switchTab('eliminated')">❌ 淘汰名单<span class="badge" id="badge-elim">0</span></button>
+  <button class="tab" data-tab="flagged" onclick="switchTab('flagged')">⚠️ 存疑区<span class="badge" id="badge-flag">0</span></button>
+  <button class="tab" data-tab="cards" onclick="switchTab('cards')">🃏 评估卡</button>
+  <button class="tab" data-tab="funnel" onclick="switchTab('funnel')">📊 复盘 & V2</button>
 </div>
 
 <div class="panel" id="panel-ranking">
@@ -466,8 +466,10 @@ function updateStats() {
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
-  document.querySelector(`[onclick="switchTab('${name}')"]`).classList.add('active');
-  document.getElementById('panel-' + name).classList.remove('hidden');
+  var tab = document.querySelector('[data-tab="' + name + '"]');
+  if (tab) tab.classList.add('active');
+  var panel = document.getElementById('panel-' + name);
+  if (panel) panel.classList.remove('hidden');
 }
 
 function showCardDetail(id) {
