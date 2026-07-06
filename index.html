@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>资深门店导购 · 筛选标准表 V1</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; padding: 20px; }
+.container { max-width: 1100px; margin: 0 auto; }
+
+.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+.header-left h1 { font-size: 22px; color: #1a1a1a; font-weight: 700; margin-bottom: 4px; }
+.header-left .sub { font-size: 13px; color: #999; }
+.header-right { display: flex; gap: 10px; }
+
+.btn { padding: 8px 18px; border-radius: 6px; font-size: 13px; cursor: pointer; border: 1px solid #ddd; background: #fff; color: #333; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { border-color: #aaa; }
+.btn-primary { background: #2b6de8; color: #fff; border-color: #2b6de8; }
+.btn-primary:hover { background: #1a5bd1; }
+.btn-outline { background: #fff; color: #2b6de8; border-color: #2b6de8; }
+.btn-outline:hover { background: #f0f5ff; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-danger { color: #e74c3c; border-color: #e74c3c; }
+.btn-danger:hover { background: #fef0ef; }
+
+.stats-bar { display: flex; gap: 16px; margin-bottom: 20px; }
+.stat-card { flex: 1; background: #fff; border-radius: 8px; padding: 16px; text-align: center; border: 1px solid #eee; }
+.stat-card .num { font-size: 28px; font-weight: 700; color: #2b6de8; }
+.stat-card .label { font-size: 12px; color: #999; margin-top: 4px; }
+
+.section { background: #fff; border-radius: 10px; margin-bottom: 16px; overflow: hidden; border: 1px solid #eee; }
+.section-header { padding: 14px 20px; display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; border-bottom: 1px solid #f0f0f0; }
+.section-header .icon { font-size: 18px; }
+.section-header .title { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+.section-header .count { font-size: 12px; color: #999; margin-left: 4px; }
+.section-header .arrow { margin-left: auto; font-size: 12px; color: #bbb; transition: transform .2s; }
+.section.collapsed .section-header .arrow { transform: rotate(-90deg); }
+.section.collapsed .section-body { display: none; }
+
+.section-body { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th { background: #fafafa; color: #666; font-weight: 600; font-size: 12px; padding: 10px 14px; text-align: left; border-bottom: 2px solid #eee; white-space: nowrap; }
+tbody td { padding: 10px 14px; border-bottom: 1px solid #f5f5f5; vertical-align: middle; }
+tbody tr:hover { background: #fafcff; }
+tbody tr:last-child td { border-bottom: none; }
+
+.col-check { width: 36px; text-align: center; }
+.col-type { width: 80px; }
+.col-weight { width: 120px; }
+.col-actions { width: 72px; text-align: center; }
+
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.badge-hard { background: #e8f4fd; color: #2b6de8; }
+.badge-soft { background: #e6f7e9; color: #27ae60; }
+.badge-bonus { background: #fff8e1; color: #f39c12; }
+.badge-knockout { background: #fdecea; color: #e74c3c; }
+
+.weight-stars { display: flex; gap: 2px; cursor: pointer; }
+.weight-stars .star { font-size: 16px; color: #ddd; transition: color .15s; }
+.weight-stars .star.active { color: #f39c12; }
+.weight-stars .star:hover { color: #f39c12; }
+
+.weight-knockout { font-size: 13px; color: #e74c3c; font-weight: 700; }
+.weight-bonus { font-size: 13px; color: #27ae60; font-weight: 600; }
+
+.requirement-cell { max-width: 320px; }
+.requirement-cell .main { color: #1a1a1a; }
+.requirement-cell .note { font-size: 11px; color: #999; margin-top: 2px; }
+
+.empty-state { padding: 60px 20px; text-align: center; color: #ccc; }
+.empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+
+.toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 24px; border-radius: 8px; font-size: 13px; z-index: 999; opacity: 0; transition: opacity .3s; pointer-events: none; }
+.toast.show { opacity: 1; }
+.toast.success { background: #27ae60; }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 998; display: flex; align-items: center; justify-content: center; }
+.modal { background: #fff; border-radius: 12px; padding: 24px; width: 460px; max-width: 90vw; box-shadow: 0 8px 32px rgba(0,0,0,.12); }
+.modal h3 { font-size: 16px; margin-bottom: 16px; }
+.modal .field { margin-bottom: 14px; }
+.modal .field label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; font-weight: 600; }
+.modal .field input, .modal .field select, .modal .field textarea { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; outline: none; }
+.modal .field input:focus, .modal .field textarea:focus { border-color: #2b6de8; }
+.modal .field textarea { resize: vertical; min-height: 60px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
+
+@media (max-width: 768px) {
+  .header { flex-direction: column; }
+  .stats-bar { flex-wrap: wrap; }
+  .stat-card { min-width: 100px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-left">
+      <h1>资深门店导购 · 筛选标准表</h1>
+      <div class="sub">版本 V1 · 2026-07-06 · 基于典型零售门店导购JD提炼</div>
+    </div>
+    <div class="header-right">
+      <button class="btn" onclick="exportJSON()">📋 导出 JSON</button>
+      <button class="btn btn-outline" onclick="showAddModal()">＋ 新增筛选项</button>
+      <button class="btn btn-primary" onclick="saveTemplate()">💾 保存模板</button>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-card"><div class="num" id="count-hard">5</div><div class="label">硬性门槛</div></div>
+    <div class="stat-card"><div class="num" id="count-soft">4</div><div class="label">软性能力</div></div>
+    <div class="stat-card"><div class="num" id="count-bonus">3</div><div class="label">加分项</div></div>
+    <div class="stat-card"><div class="num" id="count-knockout">3</div><div class="label">淘汰项</div></div>
+  </div>
+
+  <!-- 硬性门槛 -->
+  <div class="section" id="sec-hard">
+    <div class="section-header" onclick="toggleSection('sec-hard')">
+      <span class="icon">📋</span>
+      <span class="title">硬性门槛</span>
+      <span class="count">(5 项)</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="section-body">
+      <table><thead><tr><th class="col-check"></th><th>筛选项</th><th>要求描述</th><th class="col-type">类型</th><th class="col-weight">权重</th><th class="col-actions">操作</th></tr></thead>
+      <tbody id="tbody-hard"></tbody></table>
+    </div>
+  </div>
+
+  <!-- 软性能力 -->
+  <div class="section" id="sec-soft">
+    <div class="section-header" onclick="toggleSection('sec-soft')">
+      <span class="icon">💬</span>
+      <span class="title">软性能力</span>
+      <span class="count">(4 项)</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="section-body">
+      <table><thead><tr><th class="col-check"></th><th>筛选项</th><th>要求描述</th><th class="col-type">类型</th><th class="col-weight">权重</th><th class="col-actions">操作</th></tr></thead>
+      <tbody id="tbody-soft"></tbody></table>
+    </div>
+  </div>
+
+  <!-- 加分项 -->
+  <div class="section" id="sec-bonus">
+    <div class="section-header" onclick="toggleSection('sec-bonus')">
+      <span class="icon">➕</span>
+      <span class="title">加分项</span>
+      <span class="count">(3 项)</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="section-body">
+      <table><thead><tr><th class="col-check"></th><th>筛选项</th><th>要求描述</th><th class="col-type">类型</th><th class="col-weight">权重</th><th class="col-actions">操作</th></tr></thead>
+      <tbody id="tbody-bonus"></tbody></table>
+    </div>
+  </div>
+
+  <!-- 淘汰项 -->
+  <div class="section" id="sec-knockout">
+    <div class="section-header" onclick="toggleSection('sec-knockout')">
+      <span class="icon">❌</span>
+      <span class="title">淘汰项（一票否决）</span>
+      <span class="count">(3 项)</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="section-body">
+      <table><thead><tr><th class="col-check"></th><th>筛选项</th><th>要求描述</th><th class="col-type">类型</th><th class="col-weight">权重</th><th class="col-actions">操作</th></tr></thead>
+      <tbody id="tbody-knockout"></tbody></table>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+// 初始数据
+const initData = {
+  hard: [
+    { id: 'h1', item: '学历', desc: '高中/中专及以上学历', note: '学信网可查', weight: 3, type: '一票否决' },
+    { id: 'h2', item: '零售经验', desc: '3年以上零售/门店销售经验', note: '同业态（服装/美妆/3C等）优先', weight: 3, type: '一票否决' },
+    { id: 'h3', item: '行业经验', desc: '有服装零售/美妆/奢侈品行业背景', note: '跨行业可评估学习能力', weight: 2, type: '可放宽' },
+    { id: 'h4', item: '证书/资质', desc: '无硬性证书要求', note: '有产品知识/销售相关培训证书加分', weight: 1, type: '参考项' },
+    { id: 'h5', item: '期望薪资', desc: '8K-15K 区间内', note: '超出范围需评估性价比', weight: 2, type: '参考项' },
+  ],
+  soft: [
+    { id: 's1', item: '沟通表达', desc: '能清晰介绍产品卖点、处理顾客异议', note: '普通话标准，有亲和力', weight: 3, type: '核心能力' },
+    { id: 's2', item: '销售技巧', desc: '具备连带销售、客单价提升能力', note: '有数据佐证者优先（如月均业绩/客单价）', weight: 3, type: '核心能力' },
+    { id: 's3', item: '服务意识', desc: '主动服务、售后跟进、客户维护', note: '能举例说明过往服务案例', weight: 2, type: '重要' },
+    { id: 's4', item: '抗压能力', desc: '适应排班制、业绩考核、节假日加班', note: '有零售旺季（618/双11等）高强度工作经验', weight: 2, type: '重要' },
+  ],
+  bonus: [
+    { id: 'b1', item: '会员/私域运营', desc: '有会员管理、私域社群运营经验', note: '加分权重中等' },
+    { id: 'b2', item: '系统工具', desc: '熟练使用POS系统、CRM系统', note: '加分权重中等' },
+    { id: 'b3', item: '团队带教', desc: '有新员工带教/培训经验', note: '加分权重高，体现晋升潜力' },
+  ],
+  knockout: [
+    { id: 'k1', item: '频繁跳槽', desc: '近2年内跳槽≥3次', note: '稳定性存疑' },
+    { id: 'k2', item: '客户投诉', desc: '过往有严重客户投诉记录', note: '需核实投诉性质' },
+    { id: 'k3', item: '简历造假', desc: '简历信息与实际不符', note: '背调不通过' },
+  ],
+};
+
+let data = JSON.parse(JSON.stringify(initData));
+
+function renderAll() {
+  renderTable('hard', 'tbody-hard');
+  renderTable('soft', 'tbody-soft');
+  renderTable('bonus', 'tbody-bonus');
+  renderTable('knockout', 'tbody-knockout');
+  updateStats();
+}
+
+function renderTable(category, tbodyId) {
+  const tbody = document.getElementById(tbodyId);
+  const items = data[category];
+  const isBonus = category === 'bonus';
+  const isKnockout = category === 'knockout';
+  const isSoft = category === 'soft';
+  const isHard = category === 'hard';
+
+  let badgeClass = 'badge-hard';
+  if (isSoft) badgeClass = 'badge-soft';
+  if (isBonus) badgeClass = 'badge-bonus';
+  if (isKnockout) badgeClass = 'badge-knockout';
+
+  tbody.innerHTML = items.map((row, idx) => {
+    const typeLabel = isKnockout ? '一票否决' : (isBonus ? '加分' : row.type || '—');
+    return `
+    <tr>
+      <td class="col-check"><input type="checkbox" ${row.checked ? 'checked' : ''} onchange="toggleCheck('${category}', ${idx}, this)"></td>
+      <td><strong style="color:#1a1a1a">${row.item}</strong></td>
+      <td class="requirement-cell">
+        <div class="main">${row.desc}</div>
+        ${row.note ? `<div class="note">${row.note}</div>` : ''}
+      </td>
+      <td><span class="badge ${badgeClass}">${typeLabel}</span></td>
+      <td class="col-weight">${renderWeight(category, row, idx)}</td>
+      <td class="col-actions">
+        <button class="btn btn-sm" onclick="editRow('${category}', ${idx})" title="编辑">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteRow('${category}', ${idx})" title="删除">🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function renderWeight(category, row, idx) {
+  if (category === 'knockout') return '<span class="weight-knockout">❌ 一票否决</span>';
+  if (category === 'bonus') return '<span class="weight-bonus">➕ 加分</span>';
+
+  let stars = '';
+  for (let i = 1; i <= 3; i++) {
+    stars += `<span class="star ${i <= row.weight ? 'active' : ''}" onclick="setWeight('${category}', ${idx}, ${i})">★</span>`;
+  }
+  const labels = ['', '参考', '重要', '核心'];
+  return `<div class="weight-stars" title="${labels[row.weight]}">${stars}</div><div style="font-size:11px;color:#999;margin-top:2px">${labels[row.weight] || ''}</div>`;
+}
+
+function setWeight(category, idx, w) {
+  data[category][idx].weight = w;
+  renderAll();
+  showToast('权重已更新');
+}
+
+function toggleCheck(category, idx, el) {
+  data[category][idx].checked = el.checked;
+}
+
+function updateStats() {
+  document.getElementById('count-hard').textContent = data.hard.length;
+  document.getElementById('count-soft').textContent = data.soft.length;
+  document.getElementById('count-bonus').textContent = data.bonus.length;
+  document.getElementById('count-knockout').textContent = data.knockout.length;
+
+  ['hard','soft','bonus','knockout'].forEach(cat => {
+    const sec = document.getElementById('sec-' + cat);
+    const hdr = sec.querySelector('.count');
+    hdr.textContent = `(${data[cat].length} 项)`;
+  });
+}
+
+function toggleSection(id) {
+  document.getElementById(id).classList.toggle('collapsed');
+}
+
+function editRow(category, idx) {
+  const row = data[category][idx];
+  const isBonus = category === 'bonus';
+  const isKnockout = category === 'knockout';
+
+  let html = '<div class="modal-overlay" id="editModal"><div class="modal"><h3>编辑筛选项</h3>';
+  html += `<div class="field"><label>筛选项名称</label><input id="edit-item" value="${escapeHtml(row.item)}"></div>`;
+  html += `<div class="field"><label>要求描述</label><textarea id="edit-desc">${escapeHtml(row.desc)}</textarea></div>`;
+  html += `<div class="field"><label>补充说明</label><input id="edit-note" value="${escapeHtml(row.note || '')}"></div>`;
+  if (!isBonus && !isKnockout) {
+    html += `<div class="field"><label>权重 (1-3星)</label><select id="edit-weight">
+      <option value="1" ${row.weight===1?'selected':''}>★ 参考</option>
+      <option value="2" ${row.weight===2?'selected':''}>★★ 重要</option>
+      <option value="3" ${row.weight===3?'selected':''}>★★★ 核心</option>
+    </select></div>`;
+    html += `<div class="field"><label>类型</label><select id="edit-type">
+      <option value="一票否决" ${row.type==='一票否决'?'selected':''}>一票否决</option>
+      <option value="可放宽" ${row.type==='可放宽'?'selected':''}>可放宽</option>
+      <option value="参考项" ${row.type==='参考项'?'selected':''}>参考项</option>
+      <option value="核心能力" ${row.type==='核心能力'?'selected':''}>核心能力</option>
+      <option value="重要" ${row.type==='重要'?'selected':''}>重要</option>
+    </select></div>`;
+  }
+  html += `<div class="modal-actions">
+    <button class="btn" onclick="closeModal()">取消</button>
+    <button class="btn btn-primary" onclick="saveEdit('${category}', ${idx}, ${isBonus}, ${isKnockout})">保存</button>
+  </div></div></div>`;
+
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+function saveEdit(category, idx, isBonus, isKnockout) {
+  const row = data[category][idx];
+  row.item = document.getElementById('edit-item').value || row.item;
+  row.desc = document.getElementById('edit-desc').value || row.desc;
+  row.note = document.getElementById('edit-note').value || '';
+  if (!isBonus && !isKnockout) {
+    row.weight = parseInt(document.getElementById('edit-weight').value);
+    row.type = document.getElementById('edit-type').value;
+  }
+  closeModal();
+  renderAll();
+  showToast('已更新');
+}
+
+function deleteRow(category, idx) {
+  if (!confirm(`确定删除「${data[category][idx].item}」？`)) return;
+  data[category].splice(idx, 1);
+  renderAll();
+  showToast('已删除');
+}
+
+function showAddModal() {
+  let html = '<div class="modal-overlay" id="addModal"><div class="modal"><h3>新增筛选项</h3>';
+  html += `<div class="field"><label>所属分类</label><select id="add-category">
+    <option value="hard">硬性门槛</option>
+    <option value="soft">软性能力</option>
+    <option value="bonus">加分项</option>
+    <option value="knockout">淘汰项</option>
+  </select></div>`;
+  html += `<div class="field"><label>筛选项名称</label><input id="add-item" placeholder="如：形象气质"></div>`;
+  html += `<div class="field"><label>要求描述</label><textarea id="add-desc" placeholder="具体标准描述"></textarea></div>`;
+  html += `<div class="field"><label>补充说明</label><input id="add-note" placeholder="可选"></div>`;
+  html += `<div class="field"><label>权重 (1-3星)</label><select id="add-weight">
+    <option value="1">★ 参考</option>
+    <option value="2" selected>★★ 重要</option>
+    <option value="3">★★★ 核心</option>
+  </select></div>`;
+  html += `<div class="field"><label>类型</label><select id="add-type">
+    <option value="一票否决">一票否决</option>
+    <option value="可放宽" selected>可放宽</option>
+    <option value="参考项">参考项</option>
+  </select></div>`;
+  html += `<div class="modal-actions">
+    <button class="btn" onclick="closeModal()">取消</button>
+    <button class="btn btn-primary" onclick="saveAdd()">添加</button>
+  </div></div></div>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+function saveAdd() {
+  const cat = document.getElementById('add-category').value;
+  const item = document.getElementById('add-item').value.trim();
+  const desc = document.getElementById('add-desc').value.trim();
+  const note = document.getElementById('add-note').value.trim();
+  if (!item || !desc) { showToast('名称和描述不能为空'); return; }
+
+  const isBonus = cat === 'bonus';
+  const isKnockout = cat === 'knockout';
+  const newRow = {
+    id: cat[0] + Date.now(),
+    item, desc, note,
+    weight: isBonus || isKnockout ? 0 : parseInt(document.getElementById('add-weight').value),
+    type: isKnockout ? '一票否决' : (isBonus ? '加分' : document.getElementById('add-type').value),
+  };
+  data[cat].push(newRow);
+  closeModal();
+  renderAll();
+  showToast('已添加');
+}
+
+function closeModal() {
+  const modal = document.querySelector('.modal-overlay');
+  if (modal) modal.remove();
+}
+
+function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function showToast(msg, success) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (success ? 'success' : '') + ' show';
+  setTimeout(() => { t.className = 'toast'; }, 2000);
+}
+
+function saveTemplate() {
+  const template = {
+    name: '资深门店导购·标准模板V1',
+    version: '1.0',
+    date: '2026-07-06',
+    data: data,
+  };
+  // save to localStorage
+  localStorage.setItem('template-senior-store-guide-v1', JSON.stringify(template));
+  // also trigger download
+  const blob = new Blob([JSON.stringify(template, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '资深门店导购-筛选标准模板-V1.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('模板已保存到本地 + 已下载 JSON 文件', true);
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '资深门店导购-筛选标准-导出.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('已导出 JSON');
+}
+
+// 加载已保存模板
+const saved = localStorage.getItem('template-senior-store-guide-v1');
+if (saved) {
+  try {
+    const t = JSON.parse(saved);
+    data = t.data;
+  } catch(e) {}
+}
+
+renderAll();
+</script>
+</body>
+</html>
