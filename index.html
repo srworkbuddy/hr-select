@@ -1,529 +1,443 @@
 <!DOCTYPE html>
+<!-- v1.0 筛选标准表 -->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>资深门店导购 · 简历筛选流水线</title>
+<title>资深门店导购 · 筛选标准表 V1</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;background:#f5f5f5;color:#1a1a1a;line-height:1.6}
-.container{max-width:1400px;margin:0 auto;padding:20px}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; padding: 20px; }
+.container { max-width: 1100px; margin: 0 auto; }
 
-.top-bar{background:#fff;border-radius:12px;padding:20px 24px;margin-bottom:16px;border:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-.top-bar h1{font-size:20px;font-weight:700}
-.top-bar .meta{font-size:12px;color:#999}
+.header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; flex-wrap: wrap; gap: 16px; }
+.header-left h1 { font-size: 22px; color: #1a1a1a; font-weight: 700; margin-bottom: 4px; }
+.header-left .sub { font-size: 13px; color: #999; }
+.header-right { display: flex; gap: 10px; }
 
-.stats-row{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
-.stat{flex:1;min-width:120px;background:#fff;border-radius:10px;padding:16px;text-align:center;border:1px solid #eee}
-.stat .n{font-size:30px;font-weight:800}
-.stat .l{font-size:12px;color:#999;margin-top:4px}
-.stat.pass .n{color:#27ae60}
-.stat.fail .n{color:#e74c3c}
-.stat.review .n{color:#f39c12}
-.stat.total .n{color:#2b6de8}
+.btn { padding: 8px 18px; border-radius: 6px; font-size: 13px; cursor: pointer; border: 1px solid #ddd; background: #fff; color: #333; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; }
+.btn:hover { border-color: #aaa; }
+.btn-primary { background: #2b6de8; color: #fff; border-color: #2b6de8; }
+.btn-primary:hover { background: #1a5bd1; }
+.btn-outline { background: #fff; color: #2b6de8; border-color: #2b6de8; }
+.btn-outline:hover { background: #f0f5ff; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-danger { color: #e74c3c; border-color: #e74c3c; }
+.btn-danger:hover { background: #fef0ef; }
 
-.tabs{display:flex;gap:0;margin-bottom:0;background:#fff;border-radius:12px 12px 0 0;overflow:hidden;border:1px solid #eee;border-bottom:none}
-.tab{padding:12px 20px;font-size:13px;cursor:pointer;border:none;background:transparent;color:#666;transition:all .2s;font-weight:500;border-bottom:2px solid transparent}
-.tab:hover{color:#2b6de8}
-.tab.active{color:#2b6de8;border-bottom-color:#2b6de8;font-weight:700}
-.tab .badge{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:10px;font-size:11px;background:#eee;color:#666}
-.tab.active .badge{background:#e8f4fd;color:#2b6de8}
+.stats-bar { display: flex; gap: 16px; margin-bottom: 20px; }
+.stat-card { flex: 1; background: #fff; border-radius: 8px; padding: 16px; text-align: center; border: 1px solid #eee; }
+.stat-card .num { font-size: 28px; font-weight: 700; color: #2b6de8; }
+.stat-card .label { font-size: 12px; color: #999; margin-top: 4px; }
 
-.panel{background:#fff;border:1px solid #eee;border-top:none;border-radius:0 0 12px 12px;padding:20px;margin-bottom:16px;min-height:400px}
-.panel.hidden{display:none}
+.section { background: #fff; border-radius: 10px; margin-bottom: 16px; overflow: hidden; border: 1px solid #eee; }
+.section-header { padding: 14px 20px; display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; border-bottom: 1px solid #f0f0f0; }
+.section-header .icon { font-size: 18px; }
+.section-header .title { font-size: 15px; font-weight: 700; color: #1a1a1a; }
+.section-header .count { font-size: 12px; color: #999; margin-left: 4px; }
+.section-header .arrow { margin-left: auto; font-size: 12px; color: #bbb; transition: transform .2s; }
+.section.collapsed .section-header .arrow { transform: rotate(-90deg); }
+.section.collapsed .section-body { display: none; }
 
-table{width:100%;border-collapse:collapse;font-size:13px}
-thead th{background:#fafafa;color:#666;font-weight:600;font-size:12px;padding:10px 10px;border-bottom:2px solid #eee;text-align:left;white-space:nowrap;position:sticky;top:0;z-index:1}
-tbody td{padding:9px 10px;border-bottom:1px solid #f0f0f0}
-tbody tr:hover{background:#fafcff}
+.section-body { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+thead th { background: #fafafa; color: #666; font-weight: 600; font-size: 12px; padding: 10px 14px; text-align: left; border-bottom: 2px solid #eee; white-space: nowrap; }
+tbody td { padding: 10px 14px; border-bottom: 1px solid #f5f5f5; vertical-align: middle; }
+tbody tr:hover { background: #fafcff; }
+tbody tr:last-child td { border-bottom: none; }
 
-.score-bar{display:inline-block;height:6px;border-radius:3px;background:#eee;vertical-align:middle;width:60px;margin-right:6px}
-.score-bar .fill{height:100%;border-radius:3px}
-.fill.high{background:#27ae60}.fill.mid{background:#f39c12}.fill.low{background:#e74c3c}
+.col-check { width: 36px; text-align: center; }
+.col-type { width: 80px; }
+.col-weight { width: 120px; }
+.col-actions { width: 72px; text-align: center; }
 
-.tag{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;margin:1px 2px}
-.tag-pass{background:#e8f5e9;color:#27ae60}
-.tag-fail{background:#fdecea;color:#e74c3c}
-.tag-review{background:#fff8e1;color:#f39c12}
-.tag-interview{background:#e8f4fd;color:#2b6de8}
-.tag-pending{background:#f3e5f5;color:#9c27b0}
-.tag-risk{background:#fdecea;color:#e74c3c}
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+.badge-hard { background: #e8f4fd; color: #2b6de8; }
+.badge-soft { background: #e6f7e9; color: #27ae60; }
+.badge-bonus { background: #fff8e1; color: #f39c12; }
+.badge-knockout { background: #fdecea; color: #e74c3c; }
 
-.btn{padding:6px 14px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid #ddd;background:#fff;color:#333;transition:all .2s}
-.btn:hover{border-color:#aaa}
-.btn-primary{background:#2b6de8;color:#fff;border-color:#2b6de8}
-.btn-primary:hover{background:#1a5bd1}
-.btn-sm{padding:3px 8px;font-size:11px}
+.weight-stars { display: flex; gap: 2px; cursor: pointer; }
+.weight-stars .star { font-size: 16px; color: #ddd; transition: color .15s; }
+.weight-stars .star.active { color: #f39c12; }
+.weight-stars .star:hover { color: #f39c12; }
 
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px}
-.assess-card{background:#fff;border:1px solid #eee;border-radius:10px;padding:18px;position:relative}
-.assess-card .name{font-size:16px;font-weight:700;margin-bottom:4px}
-.assess-card .summary{font-size:12px;color:#999;margin-bottom:12px;display:flex;gap:12px;flex-wrap:wrap}
-.assess-card .summary span{white-space:nowrap}
-.assess-card .section-label{font-size:11px;color:#999;margin-bottom:4px;font-weight:600}
-.assess-card .highlight{color:#27ae60;font-size:12px}
-.assess-card .risk{color:#e74c3c;font-size:12px}
-.assess-card .verdict{text-align:center;padding:8px;border-radius:6px;margin-top:12px;font-weight:700;font-size:13px}
-.assess-card .rank-badge{position:absolute;top:12px;right:12px;font-size:22px;font-weight:800;color:#2b6de8;opacity:.3}
+.weight-knockout { font-size: 13px; color: #e74c3c; font-weight: 700; }
+.weight-bonus { font-size: 13px; color: #27ae60; font-weight: 600; }
 
-.funnel-section{margin-bottom:24px}
-.funnel-section h3{font-size:14px;margin-bottom:12px;color:#1a1a1a}
-.funnel-bar{display:flex;align-items:center;margin-bottom:8px;gap:12px}
-.funnel-bar .label{width:100px;text-align:right;font-size:12px;color:#666}
-.funnel-bar .bar-wrap{flex:1;height:32px;background:#f0f0f0;border-radius:6px;overflow:hidden;position:relative}
-.funnel-bar .bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:12px;font-size:12px;color:#fff;font-weight:600;min-width:60px}
-.funnel-bar .count{width:60px;font-size:13px;font-weight:600}
+.requirement-cell { max-width: 320px; }
+.requirement-cell .main { color: #1a1a1a; }
+.requirement-cell .note { font-size: 11px; color: #999; margin-top: 2px; }
 
-.suggestion-box{background:#fafafa;border:1px solid #eee;border-radius:8px;padding:16px;margin-top:12px}
-.suggestion-box .item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0}
-.suggestion-box .item:last-child{border-bottom:none}
-.suggestion-box .change{font-weight:700}
-.suggestion-box .change.up{color:#27ae60}.suggestion-box .change.down{color:#e74c3c}.suggestion-box .change.new{color:#2b6de8}
+.empty-state { padding: 60px 20px; text-align: center; color: #ccc; }
+.empty-state .icon { font-size: 40px; margin-bottom: 12px; }
 
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:999;display:flex;align-items:center;justify-content:center}
-.modal{background:#fff;border-radius:12px;padding:24px;width:600px;max-width:90vw;max-height:80vh;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.12)}
-.modal h3{margin-bottom:16px;font-size:16px}
-.modal table{font-size:12px}
-.modal table th,.modal table td{padding:6px 8px}
+.toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #333; color: #fff; padding: 10px 24px; border-radius: 8px; font-size: 13px; z-index: 999; opacity: 0; transition: opacity .3s; pointer-events: none; }
+.toast.show { opacity: 1; }
+.toast.success { background: #27ae60; }
 
-.filter-row{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
-.filter-row input,.filter-row select{padding:6px 12px;border:1px solid #ddd;border-radius:6px;font-size:12px;outline:none}
-.filter-row input:focus{border-color:#2b6de8}
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 998; display: flex; align-items: center; justify-content: center; }
+.modal { background: #fff; border-radius: 12px; padding: 24px; width: 460px; max-width: 90vw; box-shadow: 0 8px 32px rgba(0,0,0,.12); }
+.modal h3 { font-size: 16px; margin-bottom: 16px; }
+.modal .field { margin-bottom: 14px; }
+.modal .field label { display: block; font-size: 12px; color: #666; margin-bottom: 4px; font-weight: 600; }
+.modal .field input, .modal .field select, .modal .field textarea { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; outline: none; }
+.modal .field input:focus, .modal .field textarea:focus { border-color: #2b6de8; }
+.modal .field textarea { resize: vertical; min-height: 60px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 20px; }
 
-@media(max-width:768px){.card-grid{grid-template-columns:1fr}.tab{padding:10px 12px;font-size:11px}}
+@media (max-width: 768px) {
+  .header { flex-direction: column; }
+  .stats-bar { flex-wrap: wrap; }
+  .stat-card { min-width: 100px; }
+}
 </style>
 </head>
 <body>
 <div class="container">
 
-<div class="top-bar">
-  <div>
-    <h1>📋 资深门店导购 · 简历筛选流水线</h1>
-    <div class="meta">标准模板 V1 | 2026-07-06 | 模拟简历 30 份</div>
+  <div class="header">
+    <div class="header-left">
+      <h1>资深门店导购 · 筛选标准表</h1>
+      <div class="sub">版本 V1 · 2026-07-06 · 基于典型零售门店导购JD提炼</div>
+    </div>
+    <div class="header-right">
+      <button class="btn" onclick="exportJSON()">📋 导出 JSON</button>
+      <button class="btn btn-outline" onclick="showAddModal()">＋ 新增筛选项</button>
+      <button class="btn btn-primary" onclick="saveTemplate()">💾 保存模板</button>
+    </div>
   </div>
-  <div style="display:flex;gap:8px">
-    <button class="btn" onclick="showModal('criteria')">📐 查看筛选标准</button>
-    <button class="btn btn-primary" onclick="refreshAll()">🔄 重新评分</button>
+
+  <div class="stats-bar">
+    <div class="stat-card"><div class="num" id="count-hard">5</div><div class="label">硬性门槛</div></div>
+    <div class="stat-card"><div class="num" id="count-soft">4</div><div class="label">软性能力</div></div>
+    <div class="stat-card"><div class="num" id="count-bonus">3</div><div class="label">加分项</div></div>
+    <div class="stat-card"><div class="num" id="count-knockout">3</div><div class="label">淘汰项</div></div>
   </div>
+
+  <!-- 硬性门槛 -->
+  <div class="section" id="sec-hard">
+    <div class="section-header" onclick="toggleSection('sec-hard')">
+      <span class="icon">📋</span>
+      <span class="title">硬性门槛</span>
+      <span class="count">(5 项)</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="section-body">
+      <table><thead><tr><th class="col-check"></th><th>筛选项</th><th>要求描述</th><th class="col-type">类型</th><th class="col-weight">权重</th><th class="col-actions">操作</th></tr></thead>
+      <tbody id="tbody-hard"></tbody></table>
+    </div>
+  </div>
+
+  <!-- 软性能力 -->
+  <div class="section" id="sec-soft">
+    <div class="section-header" onclick="toggleSection('sec-soft')">
+      <span class="icon">💬</span>
+      <span class="title">软性能力</span>
+      <span class="count">(4 项)</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="section-body">
+      <table><thead><tr><th class="col-check"></th><th>筛选项</th><th>要求描述</th><th class="col-type">类型</th><th class="col-weight">权重</th><th class="col-actions">操作</th></tr></thead>
+      <tbody id="tbody-soft"></tbody></table>
+    </div>
+  </div>
+
+  <!-- 加分项 -->
+  <div class="section" id="sec-bonus">
+    <div class="section-header" onclick="toggleSection('sec-bonus')">
+      <span class="icon">➕</span>
+      <span class="title">加分项</span>
+      <span class="count">(3 项)</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="section-body">
+      <table><thead><tr><th class="col-check"></th><th>筛选项</th><th>要求描述</th><th class="col-type">类型</th><th class="col-weight">权重</th><th class="col-actions">操作</th></tr></thead>
+      <tbody id="tbody-bonus"></tbody></table>
+    </div>
+  </div>
+
+  <!-- 淘汰项 -->
+  <div class="section" id="sec-knockout">
+    <div class="section-header" onclick="toggleSection('sec-knockout')">
+      <span class="icon">❌</span>
+      <span class="title">淘汰项（一票否决）</span>
+      <span class="count">(3 项)</span>
+      <span class="arrow">▼</span>
+    </div>
+    <div class="section-body">
+      <table><thead><tr><th class="col-check"></th><th>筛选项</th><th>要求描述</th><th class="col-type">类型</th><th class="col-weight">权重</th><th class="col-actions">操作</th></tr></thead>
+      <tbody id="tbody-knockout"></tbody></table>
+    </div>
+  </div>
+
 </div>
 
-<div class="stats-row">
-  <div class="stat total"><div class="n" id="stat-total">30</div><div class="l">投递总数</div></div>
-  <div class="stat pass"><div class="n" id="stat-pass">0</div><div class="l">通过初筛</div></div>
-  <div class="stat fail"><div class="n" id="stat-fail">0</div><div class="l">淘汰</div></div>
-  <div class="stat review"><div class="n" id="stat-review">0</div><div class="l">存疑 · 待复核</div></div>
-</div>
-
-<div class="tabs">
-  <button class="tab active" data-tab="ranking" onclick="switchTab('ranking')">🏆 综合排名<span class="badge">TOP20</span></button>
-  <button class="tab" data-tab="eliminated" onclick="switchTab('eliminated')">❌ 淘汰名单<span class="badge" id="badge-elim">0</span></button>
-  <button class="tab" data-tab="flagged" onclick="switchTab('flagged')">⚠️ 存疑区<span class="badge" id="badge-flag">0</span></button>
-  <button class="tab" data-tab="cards" onclick="switchTab('cards')">🃏 评估卡</button>
-  <button class="tab" data-tab="funnel" onclick="switchTab('funnel')">📊 复盘 & V2</button>
-</div>
-
-<div class="panel" id="panel-ranking">
-  <div class="filter-row">
-    <input type="text" placeholder="🔍 搜索姓名/手机号..." oninput="filterRanking()" id="search-ranking" style="width:180px">
-    <select onchange="filterRanking()" id="filter-status"><option value="">全部状态</option><option value="面试">面试</option><option value="待定">待定</option><option value="淘汰">淘汰</option></select>
-    <span style="font-size:12px;color:#999;margin-left:auto">点击行查看评估卡 ↓</span>
-  </div>
-  <div style="max-height:600px;overflow-y:auto">
-    <table><thead><tr><th>排名</th><th>姓名</th><th>年龄</th><th>经验</th><th>学历</th><th>行业</th><th>匹配分</th><th>硬性门槛</th><th>软性能力</th><th>加分</th><th>状态</th><th>标记</th></tr></thead>
-    <tbody id="tbody-ranking"></tbody></table>
-  </div>
-</div>
-
-<div class="panel hidden" id="panel-eliminated">
-  <div style="max-height:600px;overflow-y:auto">
-    <table><thead><tr><th>姓名</th><th>年龄</th><th>经验</th><th>淘汰原因</th><th>触发标准</th><th>详情</th></tr></thead>
-    <tbody id="tbody-eliminated"></tbody></table>
-  </div>
-</div>
-
-<div class="panel hidden" id="panel-flagged">
-  <div style="max-height:600px;overflow-y:auto">
-    <table><thead><tr><th>姓名</th><th>经验</th><th>疑点类型</th><th>详细说明</th><th>HR操作建议</th></tr></thead>
-    <tbody id="tbody-flagged"></tbody></table>
-  </div>
-</div>
-
-<div class="panel hidden" id="panel-cards">
-  <div class="card-grid" id="card-grid"></div>
-</div>
-
-<div class="panel hidden" id="panel-funnel">
-  <div class="funnel-section">
-    <h3>📊 初筛转化漏斗</h3>
-    <div id="funnel-chart"></div>
-  </div>
-  <div class="funnel-section">
-    <h3>🔧 标准权重调整建议 → V2</h3>
-    <div id="v2-suggestions"></div>
-  </div>
-  <button class="btn btn-primary" onclick="saveV2()" style="margin-top:12px">💾 导出为【资深门店导购·标准模板V2】</button>
-</div>
-</div>
-
-<div id="modal-container"></div>
+<div id="toast" class="toast"></div>
 
 <script>
-// ═══════════════ 筛选标准 V1 ═══════════════
-const CRITERIA_V1 = {
+// 初始数据
+const initData = {
   hard: [
-    {id:'h1',item:'学历',min:'高中/中专',ideal:'大专及以上',weight:3,veto:true},
-    {id:'h2',item:'零售经验',min:'3年以上',ideal:'5年以上同业态',weight:3,veto:true},
-    {id:'h3',item:'行业经验',min:'有零售背景',ideal:'同品类深度经验',weight:2,veto:false},
-    {id:'h4',item:'证书资质',min:'无硬性要求',ideal:'有培训认证',weight:1,veto:false},
-    {id:'h5',item:'期望薪资',min:'8K-15K',ideal:'市场匹配',weight:2,veto:false},
+    { id: 'h1', item: '学历', desc: '高中/中专及以上学历', note: '学信网可查', weight: 3, type: '一票否决' },
+    { id: 'h2', item: '零售经验', desc: '3年以上零售/门店销售经验', note: '同业态（服装/美妆/3C等）优先', weight: 3, type: '一票否决' },
+    { id: 'h3', item: '行业经验', desc: '有服装零售/美妆/奢侈品行业背景', note: '跨行业可评估学习能力', weight: 2, type: '可放宽' },
+    { id: 'h4', item: '证书/资质', desc: '无硬性证书要求', note: '有产品知识/销售相关培训证书加分', weight: 1, type: '参考项' },
+    { id: 'h5', item: '期望薪资', desc: '8K-15K 区间内', note: '超出范围需评估性价比', weight: 2, type: '参考项' },
   ],
   soft: [
-    {id:'s1',item:'沟通表达',weight:3},
-    {id:'s2',item:'销售技巧',weight:3},
-    {id:'s3',item:'服务意识',weight:2},
-    {id:'s4',item:'抗压能力',weight:2},
-    {id:'s5',item:'学习能力',weight:1},
+    { id: 's1', item: '沟通表达', desc: '能清晰介绍产品卖点、处理顾客异议', note: '普通话标准，有亲和力', weight: 3, type: '核心能力' },
+    { id: 's2', item: '销售技巧', desc: '具备连带销售、客单价提升能力', note: '有数据佐证者优先（如月均业绩/客单价）', weight: 3, type: '核心能力' },
+    { id: 's3', item: '服务意识', desc: '主动服务、售后跟进、客户维护', note: '能举例说明过往服务案例', weight: 2, type: '重要' },
+    { id: 's4', item: '抗压能力', desc: '适应排班制、业绩考核、节假日加班', note: '有零售旺季（618/双11等）高强度工作经验', weight: 2, type: '重要' },
   ],
-  bonus: ['会员/私域运营','POS/CRM系统','团队带教','多语言'],
+  bonus: [
+    { id: 'b1', item: '会员/私域运营', desc: '有会员管理、私域社群运营经验', note: '加分权重中等' },
+    { id: 'b2', item: '系统工具', desc: '熟练使用POS系统、CRM系统', note: '加分权重中等' },
+    { id: 'b3', item: '团队带教', desc: '有新员工带教/培训经验', note: '加分权重高，体现晋升潜力' },
+  ],
   knockout: [
-    {id:'k1',item:'频繁跳槽',rule:'近2年跳槽≥3次'},
-    {id:'k2',item:'严重投诉',rule:'过往有严重客户投诉'},
-    {id:'k3',item:'简历造假',rule:'核心信息与实际不符'},
+    { id: 'k1', item: '频繁跳槽', desc: '近2年内跳槽≥3次', note: '稳定性存疑' },
+    { id: 'k2', item: '客户投诉', desc: '过往有严重客户投诉记录', note: '需核实投诉性质' },
+    { id: 'k3', item: '简历造假', desc: '简历信息与实际不符', note: '背调不通过' },
   ],
 };
 
-// ═══════════════ 30份模拟简历 ═══════════════
-const CANDIDATES = [
-  {id:1,name:'张丽华',age:28,edu:'大专',major:'市场营销',expYears:5,industry:'服装零售',lastCompany:'绫致时装',salary:'10-12K',jobChanges:2,recentFreq:1,gap:0,hasGap:false,soft:{s1:4,s2:5,s3:4,s4:4,s5:3},bonus:['会员/私域运营','团队带教'],knockout:[]},
-  {id:2,name:'王美玲',age:25,edu:'本科',major:'工商管理',expYears:3,industry:'美妆',lastCompany:'丝芙兰',salary:'9-11K',jobChanges:2,recentFreq:1,gap:0,hasGap:false,soft:{s1:4,s2:3,s3:4,s4:3,s5:4},bonus:['POS/CRM系统','多语言'],knockout:[]},
-  {id:3,name:'李雪琴',age:32,edu:'高中',major:'—',expYears:8,industry:'服装零售',lastCompany:'太平鸟',salary:'12-15K',jobChanges:1,recentFreq:0,gap:0,hasGap:false,soft:{s1:5,s2:5,s3:5,s4:5,s5:3},bonus:['会员/私域运营','POS/CRM系统','团队带教'],knockout:[]},
-  {id:4,name:'赵晓燕',age:23,edu:'大专',major:'电子商务',expYears:1,industry:'3C数码',lastCompany:'迪信通',salary:'6-8K',jobChanges:2,recentFreq:2,gap:0,hasGap:false,soft:{s1:3,s2:2,s3:3,s4:2,s5:3},bonus:[],knockout:[]},
-  {id:5,name:'陈敏',age:35,edu:'大专',major:'旅游管理',expYears:12,industry:'珠宝零售',lastCompany:'周大福',salary:'15-18K',jobChanges:1,recentFreq:0,gap:6,hasGap:true,gapReason:'生育休假',soft:{s1:4,s2:4,s3:5,s4:4,s5:2},bonus:['团队带教'],knockout:[]},
-  {id:6,name:'刘芳',age:27,edu:'本科',major:'英语',expYears:4,industry:'奢侈品',lastCompany:'LV',salary:'14-18K',jobChanges:1,recentFreq:0,gap:0,hasGap:false,soft:{s1:5,s2:4,s3:5,s4:3,s5:4},bonus:['多语言','POS/CRM系统','会员/私域运营'],knockout:[]},
-  {id:7,name:'周小红',age:30,edu:'中专',major:'—',expYears:6,industry:'鞋服零售',lastCompany:'百丽',salary:'9-11K',jobChanges:3,recentFreq:3,gap:0,hasGap:false,soft:{s1:3,s2:3,s3:3,s4:3,s5:2},bonus:[],knockout:['频繁跳槽']},
-  {id:8,name:'吴婷婷',age:26,edu:'大专',major:'服装设计',expYears:2,industry:'服装零售',lastCompany:'优衣库',salary:'8-10K',jobChanges:2,recentFreq:1,gap:0,hasGap:false,soft:{s1:4,s2:3,s3:4,s4:4,s5:3},bonus:['POS/CRM系统'],knockout:[]},
-  {id:9,name:'郑秀英',age:38,edu:'初中',major:'—',expYears:15,industry:'食品零售',lastCompany:'来伊份',salary:'7-9K',jobChanges:1,recentFreq:0,gap:0,hasGap:false,soft:{s1:3,s2:4,s3:4,s4:3,s5:1},bonus:['团队带教'],knockout:[]},
-  {id:10,name:'林佳慧',age:29,edu:'本科',major:'市场营销',expYears:5,industry:'美妆',lastCompany:'屈臣氏',salary:'10-13K',jobChanges:2,recentFreq:1,gap:0,hasGap:false,soft:{s1:4,s2:4,s3:4,s4:4,s5:4},bonus:['会员/私域运营','POS/CRM系统'],knockout:[]},
-  {id:11,name:'孙丽丽',age:24,edu:'大专',major:'珠宝鉴定',expYears:3,industry:'珠宝零售',lastCompany:'周生生',salary:'9-12K',jobChanges:1,recentFreq:0,gap:0,hasGap:false,soft:{s1:3,s2:3,s3:4,s4:3,s5:3},bonus:[],knockout:[]},
-  {id:12,name:'马艳红',age:31,edu:'高中',major:'—',expYears:9,industry:'服装零售',lastCompany:'海澜之家',salary:'11-14K',jobChanges:2,recentFreq:0,gap:0,hasGap:false,soft:{s1:4,s2:5,s3:3,s4:4,s5:2},bonus:['团队带教','POS/CRM系统'],knockout:[]},
-  {id:13,name:'黄丽',age:22,edu:'大专',major:'物流管理',expYears:1,industry:'零售',lastCompany:'名创优品',salary:'5-7K',jobChanges:1,recentFreq:1,gap:0,hasGap:false,soft:{s1:2,s2:1,s3:3,s4:2,s5:3},bonus:[],knockout:[]},
-  {id:14,name:'杨雪',age:28,edu:'本科',major:'心理学',expYears:4,industry:'奢侈品',lastCompany:'Gucci',salary:'13-16K',jobChanges:1,recentFreq:0,gap:0,hasGap:false,soft:{s1:5,s2:4,s3:5,s4:3,s5:4},bonus:['多语言','会员/私域运营'],knockout:[]},
-  {id:15,name:'罗小娟',age:33,edu:'中专',major:'—',expYears:10,industry:'服装零售',lastCompany:'森马',salary:'10-12K',jobChanges:2,recentFreq:0,gap:0,hasGap:false,soft:{s1:4,s2:4,s3:4,s4:4,s5:2},bonus:['团队带教'],knockout:[]},
-  {id:16,name:'何静',age:26,edu:'本科',major:'商务英语',expYears:3,industry:'服装零售',lastCompany:'ZARA',salary:'9-12K',jobChanges:3,recentFreq:3,gap:0,hasGap:false,soft:{s1:4,s2:3,s3:3,s4:3,s5:4},bonus:['多语言'],knockout:['频繁跳槽']},
-  {id:17,name:'谢萍',age:36,edu:'高中',major:'—',expYears:11,industry:'美妆',lastCompany:'娇兰佳人',salary:'11-14K',jobChanges:2,recentFreq:0,gap:8,hasGap:true,gapReason:'全职妈妈重返职场',soft:{s1:4,s2:4,s3:4,s4:3,s5:2},bonus:['会员/私域运营'],knockout:[]},
-  {id:18,name:'曾小琴',age:24,edu:'大专',major:'市场营销',expYears:2,industry:'3C数码',lastCompany:'苹果授权店',salary:'7-9K',jobChanges:1,recentFreq:0,gap:0,hasGap:false,soft:{s1:3,s2:2,s3:3,s4:3,s5:3},bonus:['POS/CRM系统'],knockout:[]},
-  {id:19,name:'邹丽梅',age:40,edu:'初中',major:'—',expYears:16,industry:'鞋服零售',lastCompany:'达芙妮',salary:'8-10K',jobChanges:4,recentFreq:2,gap:0,hasGap:false,soft:{s1:3,s2:4,s3:4,s4:3,s5:1},bonus:[],knockout:[]},
-  {id:20,name:'邓悦',age:27,edu:'本科',major:'国际贸易',expYears:4,industry:'服装零售',lastCompany:'H&M',salary:'10-13K',jobChanges:2,recentFreq:1,gap:0,hasGap:false,soft:{s1:4,s2:4,s3:4,s4:4,s5:3},bonus:['POS/CRM系统','多语言'],knockout:[]},
-  {id:21,name:'彭丽',age:29,edu:'大专',major:'会计',expYears:7,industry:'美妆',lastCompany:'完美日记',salary:'10-12K',jobChanges:2,recentFreq:0,gap:3,hasGap:true,gapReason:'待业学习',soft:{s1:4,s2:4,s3:3,s4:4,s5:3},bonus:['会员/私域运营','团队带教'],knockout:[]},
-  {id:22,name:'覃秀珍',age:34,edu:'高中',major:'—',expYears:13,industry:'食品零售',lastCompany:'良品铺子',salary:'8-10K',jobChanges:1,recentFreq:0,gap:0,hasGap:false,soft:{s1:3,s2:4,s3:4,s4:3,s5:2},bonus:['团队带教'],knockout:[]},
-  {id:23,name:'余美丽',age:25,edu:'本科',major:'设计',expYears:2,industry:'服装零售',lastCompany:'UR',salary:'8-10K',jobChanges:4,recentFreq:3,gap:0,hasGap:false,soft:{s1:3,s2:3,s3:3,s4:2,s5:4},bonus:[],knockout:['频繁跳槽']},
-  {id:24,name:'石晓红',age:30,edu:'大专',major:'酒店管理',expYears:7,industry:'奢侈品',lastCompany:'Coach',salary:'12-16K',jobChanges:1,recentFreq:0,gap:0,hasGap:false,soft:{s1:5,s2:5,s3:5,s4:4,s5:3},bonus:['多语言','POS/CRM系统','会员/私域运营','团队带教'],knockout:[]},
-  {id:25,name:'易娟',age:28,edu:'大专',major:'文秘',expYears:6,industry:'家纺零售',lastCompany:'罗莱',salary:'8-11K',jobChanges:2,recentFreq:1,gap:0,hasGap:false,soft:{s1:4,s2:4,s3:4,s4:3,s5:3},bonus:['POS/CRM系统'],knockout:[]},
-  {id:26,name:'曹桂英',age:45,edu:'小学',major:'—',expYears:20,industry:'综合零售',lastCompany:'个体经营',salary:'6-8K',jobChanges:5,recentFreq:1,gap:0,hasGap:false,soft:{s1:2,s2:3,s3:3,s4:2,s5:1},bonus:[],knockout:[]},
-  {id:27,name:'魏雪梅',age:26,edu:'本科',major:'广告学',expYears:3,industry:'美妆',lastCompany:'欧莱雅专柜',salary:'10-13K',jobChanges:1,recentFreq:0,gap:0,hasGap:false,soft:{s1:4,s2:4,s3:4,s4:3,s5:4},bonus:['会员/私域运营','多语言'],knockout:[]},
-  {id:28,name:'范玲',age:31,edu:'中专',major:'—',expYears:8,industry:'母婴零售',lastCompany:'孩子王',salary:'9-11K',jobChanges:2,recentFreq:0,gap:0,hasGap:false,soft:{s1:4,s2:4,s3:5,s4:4,s5:2},bonus:['会员/私域运营','团队带教'],knockout:[]},
-  {id:29,name:'陶秀兰',age:37,edu:'初中',major:'—',expYears:14,industry:'服装零售',lastCompany:'以纯',salary:'7-9K',jobChanges:2,recentFreq:0,gap:0,hasGap:false,soft:{s1:3,s2:4,s3:3,s4:3,s5:1},bonus:[],knockout:[]},
-  {id:30,name:'汤敏',age:26,edu:'本科',major:'日语',expYears:3,industry:'服装零售',lastCompany:'无印良品',salary:'9-12K',jobChanges:2,recentFreq:1,gap:0,hasGap:false,soft:{s1:4,s2:3,s3:4,s4:3,s5:4},bonus:['多语言','POS/CRM系统'],knockout:[]},
-];
+let data = JSON.parse(JSON.stringify(initData));
 
-// ═══════════════ 评分引擎 ═══════════════
-function scoreCandidate(c) {
-  let hardPass = true, hardScore = 0, hardMax = 0, hardDetails = [];
-  let softScore = 0, softMax = 0, softDetails = [];
-  let bonusScore = 0;
-  let knockoutHit = [];
-
-  // 硬性门槛
-  CRITERIA_V1.hard.forEach(h => {
-    hardMax += h.weight;
-    let pass = true, reason = '';
-    if (h.id === 'h1') {
-      const eduLevel = {小学:0,初中:1,中专:2,高中:2,大专:3,本科:4,硕士:5};
-      pass = eduLevel[c.edu] >= eduLevel[h.min.split('/')[0]];
-      if (!pass) reason = `学历不达标：${c.edu} < ${h.min}`;
-      hardScore += pass ? h.weight : 0;
-    } else if (h.id === 'h2') {
-      pass = c.expYears >= 3;
-      if (!pass) reason = `零售经验不足：${c.expYears}年 < 3年`;
-      hardScore += pass ? h.weight : 0;
-    } else if (h.id === 'h3') {
-      pass = c.industry !== '无';
-      if (!pass) reason = `无零售行业背景`;
-      hardScore += pass ? (c.industry.includes('服装')||c.industry.includes('美妆')||c.industry.includes('奢侈品')||c.industry.includes('珠宝') ? h.weight : h.weight*0.6) : 0;
-    } else if (h.id === 'h4') {
-      hardScore += h.weight;
-      pass = true;
-    } else if (h.id === 'h5') {
-      const range = c.salary.match(/(\d+)-(\d+)/);
-      if (range) {
-        const avg = (parseInt(range[1])+parseInt(range[2]))/2;
-        pass = avg >= 8 && avg <= 15;
-        if (!pass) reason = `薪资范围不匹配`;
-      }
-      hardScore += pass ? h.weight : 0;
-    }
-    hardDetails.push({item:h.item,pass,reason});
-    if (h.veto && !pass) hardPass = false;
-  });
-
-  // 淘汰项
-  if (c.knockout && c.knockout.includes('频繁跳槽')) knockoutHit.push('近2年跳槽≥3次');
-  if (c.edu === '小学') knockoutHit.push('学历过低');
-
-  // 软性能力
-  CRITERIA_V1.soft.forEach(s => {
-    softMax += s.weight;
-    softScore += (c.soft[s.id] || 2) * s.weight / 5;
-  });
-
-  // 加分
-  bonusScore = c.bonus.length * 0.5;
-
-  const totalScore = (hardScore/hardMax*100)*0.4 + (softScore/softMax*100)*0.4 + bonusScore*10*0.2;
-  const hardRatio = hardScore / hardMax;
-  const softRatio = softScore / softMax;
-
-  let status = '面试', flag = [];
-  if (!hardPass || knockoutHit.length > 0) status = '淘汰';
-  else if (totalScore < 55) status = '待定';
-  else if (totalScore < 65) status = '待定';
-
-  if (c.hasGap && c.gap >= 3) flag.push({type:'工作断层',detail:`${c.gap}个月断层（${c.gapReason}）`,suggestion:'面试中核实断层原因及当前状态'});
-  if (c.recentFreq >= 3) flag.push({type:'频繁跳槽',detail:`近2年跳槽${c.recentFreq}次`,suggestion:'面试中追问每次离职原因'});
-  if (c.age > 40 && c.edu === '初中') flag.push({type:'综合风险',detail:'年龄偏大+学历偏低',suggestion:'评估体力与学习意愿'});
-
-  return {
-    ...c,
-    hardPass, hardScore, hardMax, hardRatio, hardDetails,
-    softScore, softMax, softRatio, softDetails: CRITERIA_V1.soft.map(s => ({item:s.item,score:c.soft[s.id]||2})),
-    bonusScore, totalScore, status, flag, knockoutHit,
-  };
-}
-
-// ═══════════════ 全局评分 ═══════════════
-let scored = [];
-function refreshAll() {
-  scored = CANDIDATES.map(scoreCandidate);
-  scored.sort((a,b) => b.totalScore - a.totalScore);
-  renderAll();
-}
-refreshAll();
-
-// ═══════════════ 渲染 ═══════════════
 function renderAll() {
-  renderRanking();
-  renderEliminated();
-  renderFlagged();
-  renderCards();
-  renderFunnel();
+  renderTable('hard', 'tbody-hard');
+  renderTable('soft', 'tbody-soft');
+  renderTable('bonus', 'tbody-bonus');
+  renderTable('knockout', 'tbody-knockout');
   updateStats();
 }
 
-function renderRanking(filter) {
-  let data = scored;
-  if (filter) {
-    const s = document.getElementById('search-ranking').value.toLowerCase();
-    const st = document.getElementById('filter-status').value;
-    if (s) data = data.filter(c => c.name.includes(s) || c.id.toString().includes(s));
-    if (st) data = data.filter(c => c.status === st);
+function renderTable(category, tbodyId) {
+  const tbody = document.getElementById(tbodyId);
+  const items = data[category];
+  const isBonus = category === 'bonus';
+  const isKnockout = category === 'knockout';
+  const isSoft = category === 'soft';
+  const isHard = category === 'hard';
+
+  let badgeClass = 'badge-hard';
+  if (isSoft) badgeClass = 'badge-soft';
+  if (isBonus) badgeClass = 'badge-bonus';
+  if (isKnockout) badgeClass = 'badge-knockout';
+
+  tbody.innerHTML = items.map((row, idx) => {
+    const typeLabel = isKnockout ? '一票否决' : (isBonus ? '加分' : row.type || '—');
+    return `
+    <tr>
+      <td class="col-check"><input type="checkbox" ${row.checked ? 'checked' : ''} onchange="toggleCheck('${category}', ${idx}, this)"></td>
+      <td><strong style="color:#1a1a1a">${row.item}</strong></td>
+      <td class="requirement-cell">
+        <div class="main">${row.desc}</div>
+        ${row.note ? `<div class="note">${row.note}</div>` : ''}
+      </td>
+      <td><span class="badge ${badgeClass}">${typeLabel}</span></td>
+      <td class="col-weight">${renderWeight(category, row, idx)}</td>
+      <td class="col-actions">
+        <button class="btn btn-sm" onclick="editRow('${category}', ${idx})" title="编辑">✏️</button>
+        <button class="btn btn-sm btn-danger" onclick="deleteRow('${category}', ${idx})" title="删除">🗑</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function renderWeight(category, row, idx) {
+  if (category === 'knockout') return '<span class="weight-knockout">❌ 一票否决</span>';
+  if (category === 'bonus') return '<span class="weight-bonus">➕ 加分</span>';
+
+  let stars = '';
+  for (let i = 1; i <= 3; i++) {
+    stars += `<span class="star ${i <= row.weight ? 'active' : ''}" onclick="setWeight('${category}', ${idx}, ${i})">★</span>`;
   }
-  const tbody = document.getElementById('tbody-ranking');
-  tbody.innerHTML = data.slice(0, 20).map((c, i) => {
-    const hardBar = `<div class="score-bar"><div class="fill ${c.hardRatio>=0.8?'high':c.hardRatio>=0.5?'mid':'low'}" style="width:${c.hardRatio*100}%"></div></div>${Math.round(c.hardRatio*100)}%`;
-    const softBar = `<div class="score-bar"><div class="fill ${c.softRatio>=0.8?'high':c.softRatio>=0.5?'mid':'low'}" style="width:${c.softRatio*100}%"></div></div>${Math.round(c.softRatio*100)}%`;
-    const statusTag = c.status==='面试'?'tag-interview':c.status==='待定'?'tag-pending':'tag-fail';
-    let flags = '';
-    if (c.hasGap && c.gap>=3) flags += '<span class="tag tag-risk" style="font-size:10px">断层</span> ';
-    if (c.recentFreq>=3) flags += '<span class="tag tag-risk" style="font-size:10px">频跳</span> ';
-    return `<tr onclick="showCardDetail(${c.id})" style="cursor:pointer" title="点击查看评估卡">
-      <td><strong>#${i+1}</strong></td>
-      <td><strong style="color:#2b6de8">${c.name}</strong></td>
-      <td>${c.age}</td>
-      <td>${c.expYears}年</td>
-      <td>${c.edu}</td>
-      <td>${c.industry}</td>
-      <td><strong style="color:${c.totalScore>=70?'#27ae60':c.totalScore>=55?'#f39c12':'#e74c3c'}">${c.totalScore.toFixed(1)}</strong></td>
-      <td>${hardBar}</td>
-      <td>${softBar}</td>
-      <td>+${c.bonusScore.toFixed(1)}</td>
-      <td><span class="tag ${statusTag}">${c.status}</span></td>
-      <td>${flags||'—'}</td>
-    </tr>`;
-  }).join('');
+  const labels = ['', '参考', '重要', '核心'];
+  return `<div class="weight-stars" title="${labels[row.weight]}">${stars}</div><div style="font-size:11px;color:#999;margin-top:2px">${labels[row.weight] || ''}</div>`;
 }
 
-function filterRanking() { renderRanking(true); }
-
-function renderEliminated() {
-  const eliminated = scored.filter(c => c.status === '淘汰');
-  document.getElementById('badge-elim').textContent = eliminated.length;
-  document.getElementById('tbody-eliminated').innerHTML = eliminated.map(c => {
-    let reasons = [];
-    c.hardDetails.filter(d => !d.pass).forEach(d => reasons.push(d.reason));
-    c.knockoutHit.forEach(k => reasons.push(k));
-    return `<tr>
-      <td><strong>${c.name}</strong></td>
-      <td>${c.age}岁</td>
-      <td>${c.expYears}年</td>
-      <td style="color:#e74c3c;font-weight:600">${reasons.join('；')}</td>
-      <td>${c.knockoutHit.length>0?c.knockoutHit.join('、'):'硬性门槛'}</td>
-      <td>学历:${c.edu} | 行业:${c.industry} | 薪资:${c.salary}</td>
-    </tr>`;
-  }).join('') || '<tr><td colspan="6" style="text-align:center;color:#999;padding:40px">🎉 无人淘汰</td></tr>';
+function setWeight(category, idx, w) {
+  data[category][idx].weight = w;
+  renderAll();
+  showToast('权重已更新');
 }
 
-function renderFlagged() {
-  const flagged = scored.filter(c => c.flag.length > 0 && c.status !== '淘汰');
-  document.getElementById('badge-flag').textContent = flagged.length;
-  document.getElementById('tbody-flagged').innerHTML = flagged.map(c => {
-    return c.flag.map(f => `<tr>
-      <td><strong style="color:#f39c12">${c.name}</strong></td>
-      <td>${c.expYears}年 | ${c.industry}</td>
-      <td><span class="tag tag-review">${f.type}</span></td>
-      <td>${f.detail}</td>
-      <td>${f.suggestion}</td>
-    </tr>`).join('');
-  }).join('') || '<tr><td colspan="5" style="text-align:center;color:#999;padding:40px">✅ 无存疑项</td></tr>';
-}
-
-function renderCards() {
-  const top20 = scored.filter(c => c.status !== '淘汰').slice(0, 20);
-  document.getElementById('card-grid').innerHTML = top20.map((c, i) => {
-    const verdictColor = c.status==='面试'?'#27ae60':c.status==='待定'?'#f39c12':'#e74c3c';
-    const verdictBg = c.status==='面试'?'#e8f5e9':c.status==='待定'?'#fff8e1':'#fdecea';
-    return `<div class="assess-card">
-      <div class="rank-badge">#${i+1}</div>
-      <div class="name">${c.name}</div>
-      <div class="summary">
-        <span>👤 ${c.age}岁</span><span>📚 ${c.edu}·${c.major}</span><span>💼 ${c.expYears}年</span>
-        <span>🏪 ${c.industry}</span><span>💰 ${c.salary}</span>
-      </div>
-      <div class="section-label">🎯 匹配分：<strong style="color:${c.totalScore>=70?'#27ae60':'#f39c12'}">${c.totalScore.toFixed(1)}</strong></div>
-      <div class="section-label" style="margin-top:8px">✨ 亮点</div>
-      <div class="highlight">${c.bonus.length>0?c.bonus.map(b=>'✓ '+b).join('；'):'无特殊加分项'}${c.expYears>=8?'；经验丰富':''}${c.industry.includes('奢侈品')||c.industry.includes('美妆')?'；高端行业背景':''}</div>
-      <div class="section-label" style="margin-top:8px">⚠️ 风险点</div>
-      <div class="risk">${c.flag.length>0?c.flag.map(f=>f.detail).join('；'):'无明显风险'}</div>
-      <div class="verdict" style="background:${verdictBg};color:${verdictColor}">${c.status==='面试'?'✅ 推荐面试':c.status==='待定'?'⏸️ 待定·建议HR复核':'❌ 淘汰'}</div>
-    </div>`;
-  }).join('');
-}
-
-function renderFunnel() {
-  const total = scored.length;
-  const pass = scored.filter(c => c.status === '面试').length;
-  const eliminated = scored.filter(c => c.status === '淘汰').length;
-  const pending = scored.filter(c => c.status === '待定').length;
-  // 预估：面试转化率70%，录用率40%
-  const estInterview = pass + Math.round(pending * 0.5);
-  const estOffer = Math.round(estInterview * 0.4);
-  const estOnboard = Math.round(estOffer * 0.85);
-
-  const bars = [
-    {label:'投递总数',count:total,color:'#2b6de8',width:100},
-    {label:'通过初筛',count:pass+pending,color:'#27ae60',width:(pass+pending)/total*100},
-    {label:'推荐面试',count:pass,color:'#27ae60',width:pass/total*100},
-    {label:'预估进入面试',count:estInterview,color:'#f39c12',width:estInterview/total*100},
-    {label:'预估发Offer',count:estOffer,color:'#9c27b0',width:estOffer/total*100},
-    {label:'预估入职',count:estOnboard,color:'#2b6de8',width:estOnboard/total*100},
-  ];
-
-  document.getElementById('funnel-chart').innerHTML = bars.map(b => `
-    <div class="funnel-bar">
-      <div class="label">${b.label}</div>
-      <div class="bar-wrap"><div class="bar-fill" style="width:${Math.max(b.width,2)}%;background:${b.color}">${b.width.toFixed(1)}%</div></div>
-      <div class="count">${b.count}人</div>
-    </div>
-  `).join('');
-
-  // V2 权重建议
-  const suggestions = [
-    {item:'行业经验',current:'★★（可放宽）',suggested:'★★★（核心）',reason:`高匹配度候选人中${Math.round(scored.filter(c=>c.totalScore>=65&&(c.industry.includes('服装')||c.industry.includes('美妆')||c.industry.includes('奢侈品')).length/scored.filter(c=>c.totalScore>=65).length*100)}%有同品类行业经验`,change:'up'},
-    {item:'学习能力',current:'★（参考）',suggested:'★★（重要）',reason:'跨行业候选人需快速掌握产品知识，学习能力直接影响上手速度',change:'up'},
-    {item:'服务意识',current:'★★（重要）',suggested:'★★★（核心）',reason:`淘汰候选人中${scored.filter(c=>c.status==='淘汰'&&c.soft.s3<=2).length}人因服务意识低被淘汰`,change:'up'},
-    {item:'证书资质',current:'★（参考）',suggested:'★（参考）',reason:'保持，候选人中持有相关证书比例较低，强制要求会压缩人才池',change:'same'},
-    {item:'新增: 稳定性评估',current:'—',suggested:'★★（重要）',reason:`本次筛选${scored.filter(c=>c.hasGap||c.recentFreq>=3).length}人有断层或频跳风险，建议纳入软性评估`,change:'new'},
-  ];
-
-  document.getElementById('v2-suggestions').innerHTML = suggestions.map(s => `
-    <div class="suggestion-box" style="margin-bottom:8px">
-      <div class="item">
-        <span><strong>${s.item}</strong></span>
-        <span style="font-size:12px;color:#999">${s.current} → </span>
-        <span class="change ${s.change}">${s.suggested}</span>
-      </div>
-      <div style="font-size:12px;color:#666;padding:4px 0">📊 ${s.reason}</div>
-    </div>
-  `).join('');
+function toggleCheck(category, idx, el) {
+  data[category][idx].checked = el.checked;
 }
 
 function updateStats() {
-  document.getElementById('stat-total').textContent = scored.length;
-  document.getElementById('stat-pass').textContent = scored.filter(c => c.status === '面试').length;
-  document.getElementById('stat-fail').textContent = scored.filter(c => c.status === '淘汰').length;
-  document.getElementById('stat-review').textContent = scored.filter(c => c.flag.length > 0 && c.status !== '淘汰').length;
+  document.getElementById('count-hard').textContent = data.hard.length;
+  document.getElementById('count-soft').textContent = data.soft.length;
+  document.getElementById('count-bonus').textContent = data.bonus.length;
+  document.getElementById('count-knockout').textContent = data.knockout.length;
+
+  ['hard','soft','bonus','knockout'].forEach(cat => {
+    const sec = document.getElementById('sec-' + cat);
+    const hdr = sec.querySelector('.count');
+    hdr.textContent = `(${data[cat].length} 项)`;
+  });
 }
 
-function switchTab(name) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
-  var tab = document.querySelector('[data-tab="' + name + '"]');
-  if (tab) tab.classList.add('active');
-  var panel = document.getElementById('panel-' + name);
-  if (panel) panel.classList.remove('hidden');
+function toggleSection(id) {
+  document.getElementById(id).classList.toggle('collapsed');
 }
 
-function showCardDetail(id) {
-  const c = scored.find(s => s.id === id);
-  if (!c) return;
-  let hardHtml = c.hardDetails.map(d => `<tr><td>${d.item}</td><td style="color:${d.pass?'#27ae60':'#e74c3c'}">${d.pass?'✅ 通过':'❌ '+d.reason}</td></tr>`).join('');
-  let softHtml = c.softDetails.map(d => `<tr><td>${d.item}</td><td>${'★'.repeat(d.score)}${'☆'.repeat(5-d.score)} ${d.score}/5</td></tr>`).join('');
-  document.getElementById('modal-container').innerHTML = `<div class="modal-overlay" onclick="this.remove()"><div class="modal" onclick="event.stopPropagation()">
-    <h3>${c.name} · 评估卡详情</h3>
-    <p style="font-size:12px;color:#666;margin-bottom:12px">${c.age}岁 | ${c.edu}·${c.major} | ${c.expYears}年 | ${c.industry} | ${c.lastCompany} | ${c.salary}</p>
-    <h4 style="font-size:13px;margin:12px 0 6px">硬性门槛</h4><table style="width:100%"><tbody>${hardHtml}</tbody></table>
-    <h4 style="font-size:13px;margin:12px 0 6px">软性能力</h4><table style="width:100%"><tbody>${softHtml}</tbody></table>
-    <h4 style="font-size:13px;margin:12px 0 6px">加分项</h4><p style="font-size:12px">${c.bonus.length>0?c.bonus.join('、'):'无'} (+${c.bonusScore.toFixed(1)}分)</p>
-    <h4 style="font-size:13px;margin:12px 0 6px">风险标记</h4><p style="font-size:12px;color:#e74c3c">${c.flag.length>0?c.flag.map(f=>f.detail).join('；'):'无'}</p>
-    <div style="text-align:center;margin-top:16px;font-size:16px;font-weight:700;color:${c.totalScore>=70?'#27ae60':'#f39c12'}">总分：${c.totalScore.toFixed(1)} | ${c.status==='面试'?'✅ 推荐面试':c.status==='待定'?'⏸️ 待定':'❌ 淘汰'}</div>
-  </div></div>`;
-}
+function editRow(category, idx) {
+  const row = data[category][idx];
+  const isBonus = category === 'bonus';
+  const isKnockout = category === 'knockout';
 
-function showModal(type) {
-  if (type === 'criteria') {
-    let html = '';
-    html += '<h4 style="font-size:13px;margin:8px 0">硬性门槛</h4><table style="width:100%"><thead><tr><th>项目</th><th>最低要求</th><th>理想标准</th><th>权重</th><th>一票否决</th></tr></thead><tbody>';
-    CRITERIA_V1.hard.forEach(h => html += `<tr><td>${h.item}</td><td>${h.min}</td><td>${h.ideal}</td><td>${'★'.repeat(h.weight)}</td><td>${h.veto?'✅':'🔲'}</td></tr>`);
-    html += '</tbody></table><h4 style="font-size:13px;margin:12px 0 6px">软性能力</h4><table style="width:100%"><thead><tr><th>项目</th><th>权重</th></tr></thead><tbody>';
-    CRITERIA_V1.soft.forEach(s => html += `<tr><td>${s.item}</td><td>${'★'.repeat(s.weight)}</td></tr>`);
-    html += '</tbody></table><h4 style="font-size:13px;margin:12px 0 6px">淘汰项</h4><ul style="font-size:12px;padding-left:18px">';
-    CRITERIA_V1.knockout.forEach(k => html += `<li>${k.item}：${k.rule}</li>`);
-    html += '</ul>';
-    document.getElementById('modal-container').innerHTML = `<div class="modal-overlay" onclick="this.remove()"><div class="modal" onclick="event.stopPropagation()"><h3>筛选标准 V1</h3>${html}</div></div>`;
+  let html = '<div class="modal-overlay" id="editModal"><div class="modal"><h3>编辑筛选项</h3>';
+  html += `<div class="field"><label>筛选项名称</label><input id="edit-item" value="${escapeHtml(row.item)}"></div>`;
+  html += `<div class="field"><label>要求描述</label><textarea id="edit-desc">${escapeHtml(row.desc)}</textarea></div>`;
+  html += `<div class="field"><label>补充说明</label><input id="edit-note" value="${escapeHtml(row.note || '')}"></div>`;
+  if (!isBonus && !isKnockout) {
+    html += `<div class="field"><label>权重 (1-3星)</label><select id="edit-weight">
+      <option value="1" ${row.weight===1?'selected':''}>★ 参考</option>
+      <option value="2" ${row.weight===2?'selected':''}>★★ 重要</option>
+      <option value="3" ${row.weight===3?'selected':''}>★★★ 核心</option>
+    </select></div>`;
+    html += `<div class="field"><label>类型</label><select id="edit-type">
+      <option value="一票否决" ${row.type==='一票否决'?'selected':''}>一票否决</option>
+      <option value="可放宽" ${row.type==='可放宽'?'selected':''}>可放宽</option>
+      <option value="参考项" ${row.type==='参考项'?'selected':''}>参考项</option>
+      <option value="核心能力" ${row.type==='核心能力'?'selected':''}>核心能力</option>
+      <option value="重要" ${row.type==='重要'?'selected':''}>重要</option>
+    </select></div>`;
   }
+  html += `<div class="modal-actions">
+    <button class="btn" onclick="closeModal()">取消</button>
+    <button class="btn btn-primary" onclick="saveEdit('${category}', ${idx}, ${isBonus}, ${isKnockout})">保存</button>
+  </div></div></div>`;
+
+  document.body.insertAdjacentHTML('beforeend', html);
 }
 
-function saveV2() {
-  const v2 = {
-    name:'资深门店导购·标准模板V2',
-    version:'2.0',
-    date:'2026-07-06',
-    changes:[
-      {item:'行业经验',from:'★★（可放宽）',to:'★★★（核心）'},
-      {item:'学习能力',from:'★（参考）',to:'★★（重要）'},
-      {item:'服务意识',from:'★★（重要）',to:'★★★（核心）'},
-      {item:'新增：稳定性评估',from:'—',to:'★★（重要）'},
-    ],
-    hard: CRITERIA_V1.hard.map(h => ({...h, weight: h.id==='h3'?3:h.weight})),
-    soft: [...CRITERIA_V1.soft, {id:'s6',item:'稳定性评估',weight:2}].map(s => ({...s, weight: s.id==='s3'?3:s.id==='s5'?2:s.weight})),
-    bonus: CRITERIA_V1.bonus,
-    knockout: CRITERIA_V1.knockout,
+function saveEdit(category, idx, isBonus, isKnockout) {
+  const row = data[category][idx];
+  row.item = document.getElementById('edit-item').value || row.item;
+  row.desc = document.getElementById('edit-desc').value || row.desc;
+  row.note = document.getElementById('edit-note').value || '';
+  if (!isBonus && !isKnockout) {
+    row.weight = parseInt(document.getElementById('edit-weight').value);
+    row.type = document.getElementById('edit-type').value;
+  }
+  closeModal();
+  renderAll();
+  showToast('已更新');
+}
+
+function deleteRow(category, idx) {
+  if (!confirm(`确定删除「${data[category][idx].item}」？`)) return;
+  data[category].splice(idx, 1);
+  renderAll();
+  showToast('已删除');
+}
+
+function showAddModal() {
+  let html = '<div class="modal-overlay" id="addModal"><div class="modal"><h3>新增筛选项</h3>';
+  html += `<div class="field"><label>所属分类</label><select id="add-category">
+    <option value="hard">硬性门槛</option>
+    <option value="soft">软性能力</option>
+    <option value="bonus">加分项</option>
+    <option value="knockout">淘汰项</option>
+  </select></div>`;
+  html += `<div class="field"><label>筛选项名称</label><input id="add-item" placeholder="如：形象气质"></div>`;
+  html += `<div class="field"><label>要求描述</label><textarea id="add-desc" placeholder="具体标准描述"></textarea></div>`;
+  html += `<div class="field"><label>补充说明</label><input id="add-note" placeholder="可选"></div>`;
+  html += `<div class="field"><label>权重 (1-3星)</label><select id="add-weight">
+    <option value="1">★ 参考</option>
+    <option value="2" selected>★★ 重要</option>
+    <option value="3">★★★ 核心</option>
+  </select></div>`;
+  html += `<div class="field"><label>类型</label><select id="add-type">
+    <option value="一票否决">一票否决</option>
+    <option value="可放宽" selected>可放宽</option>
+    <option value="参考项">参考项</option>
+  </select></div>`;
+  html += `<div class="modal-actions">
+    <button class="btn" onclick="closeModal()">取消</button>
+    <button class="btn btn-primary" onclick="saveAdd()">添加</button>
+  </div></div></div>`;
+  document.body.insertAdjacentHTML('beforeend', html);
+}
+
+function saveAdd() {
+  const cat = document.getElementById('add-category').value;
+  const item = document.getElementById('add-item').value.trim();
+  const desc = document.getElementById('add-desc').value.trim();
+  const note = document.getElementById('add-note').value.trim();
+  if (!item || !desc) { showToast('名称和描述不能为空'); return; }
+
+  const isBonus = cat === 'bonus';
+  const isKnockout = cat === 'knockout';
+  const newRow = {
+    id: cat[0] + Date.now(),
+    item, desc, note,
+    weight: isBonus || isKnockout ? 0 : parseInt(document.getElementById('add-weight').value),
+    type: isKnockout ? '一票否决' : (isBonus ? '加分' : document.getElementById('add-type').value),
   };
-  const blob = new Blob([JSON.stringify(v2, null, 2)], {type:'application/json'});
+  data[cat].push(newRow);
+  closeModal();
+  renderAll();
+  showToast('已添加');
+}
+
+function closeModal() {
+  const modal = document.querySelector('.modal-overlay');
+  if (modal) modal.remove();
+}
+
+function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function showToast(msg, success) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (success ? 'success' : '') + ' show';
+  setTimeout(() => { t.className = 'toast'; }, 2000);
+}
+
+function saveTemplate() {
+  const template = {
+    name: '资深门店导购·标准模板V1',
+    version: '1.0',
+    date: '2026-07-06',
+    data: data,
+  };
+  // save to localStorage
+  localStorage.setItem('template-senior-store-guide-v1', JSON.stringify(template));
+  // also trigger download
+  const blob = new Blob([JSON.stringify(template, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = '资深门店导购-标准模板V2.json';
-  a.click(); URL.revokeObjectURL(url);
-  alert('V2 模板已下载！调整内容：\n• 行业经验 ★★ → ★★★（核心）\n• 学习能力 ★ → ★★（重要）\n• 服务意识 ★★ → ★★★（核心）\n• 新增：稳定性评估 ★★（重要）');
+  a.href = url;
+  a.download = '资深门店导购-筛选标准模板-V1.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('模板已保存到本地 + 已下载 JSON 文件', true);
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '资深门店导购-筛选标准-导出.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('已导出 JSON');
+}
+
+// 加载已保存模板
+const saved = localStorage.getItem('template-senior-store-guide-v1');
+if (saved) {
+  try {
+    const t = JSON.parse(saved);
+    data = t.data;
+  } catch(e) {}
 }
 
 renderAll();
